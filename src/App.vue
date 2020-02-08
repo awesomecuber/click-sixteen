@@ -22,7 +22,6 @@
             @click="increment(num)"
             class="w-full h-full"
             :class="penaltyStyle"
-            :disabled="penalty"
           ) {{ num }}
       #playareanotstarted(v-else class="w-full h-full")
         #optionsbuttons(class="flex flex-col w-full h-full")
@@ -99,7 +98,6 @@ export default {
         }
       } else {
         this.penalty = true;
-        this.time += 100;
       }
     },
     randomize(arr) {
