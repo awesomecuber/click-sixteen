@@ -13,7 +13,6 @@
     "vue": "^2.6.10"
   },
   "devDependencies": {
-    "@fullhuman/postcss-purgecss": "^1.2.0",
     "@ky-is/vue-cli-plugin-tailwind": "^2.0.0",
     "@vue/cli-plugin-babel": "^4.1.0",
     "@vue/cli-plugin-eslint": "^4.1.0",
