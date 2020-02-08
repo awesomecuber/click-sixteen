@@ -20,7 +20,9 @@
         #numberbuttons(v-for="num in nums" :key="num" :class="buttonSize")
           button(
             @click="increment(num)"
-            class="w-full h-full border-2 border-gray-700 bg-gray-300 text-6xl"
+            class="w-full h-full"
+            :class="penaltyStyle"
+            :disabled="penalty"
           ) {{ num }}
       #playareanotstarted(v-else class="w-full h-full")
         #optionsbuttons(class="flex flex-col w-full h-full")
@@ -44,12 +46,19 @@ export default {
       cur: 1,
       time: 0,
       timer: null,
-      lastTime: 0
+      lastTime: 0,
+      penalty: false,
+      penaltyTimer: 75
     };
   },
   computed: {
     buttonSize: function() {
       return `w-1/${this.size} h-1/${this.size}`;
+    },
+    penaltyStyle: function() {
+      return this.penalty
+        ? "border-2 border-red-700 bg-gray-400 text-6xl"
+        : "border-2 border-gray-700 bg-gray-300 text-6xl";
     }
   },
   methods: {
@@ -64,20 +73,33 @@ export default {
       this.size = num;
 
       this.started = true;
+
+      let penaltyTimer = this.penaltyTimer;
       this.timer = setInterval(() => {
         this.time += 1;
+        if (this.penalty) {
+          penaltyTimer -= 1;
+          if (penaltyTimer === 0) {
+            this.penalty = false;
+            penaltyTimer = this.penaltyTimer;
+          }
+        }
       }, 10);
     },
     increment(num) {
       if (num === this.cur) {
         this.cur += 1;
-      }
-      if (this.cur > this.size * this.size) {
-        clearTimeout(this.timer);
-        this.started = false;
-        this.lastTime = this.time;
-        this.time = 0;
-        this.cur = 1;
+
+        if (this.cur > this.size * this.size) {
+          clearTimeout(this.timer);
+          this.started = false;
+          this.lastTime = this.time;
+          this.time = 0;
+          this.cur = 1;
+        }
+      } else {
+        this.penalty = true;
+        this.time += 100;
       }
     },
     randomize(arr) {
