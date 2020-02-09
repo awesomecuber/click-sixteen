@@ -20,7 +20,7 @@
         #numberbuttons(v-for="num in nums" :key="num" :class="buttonSize")
           button(
             @click="increment(num)"
-            class="w-full h-full"
+            class="w-full h-full border-2 text-6xl"
             :class="penaltyStyle"
           ) {{ num }}
       #playareanotstarted(v-else class="w-full h-full")
@@ -56,8 +56,8 @@ export default {
     },
     penaltyStyle: function() {
       return this.penalty
-        ? "border-2 border-red-700 bg-gray-400 text-6xl"
-        : "border-2 border-gray-700 bg-gray-300 text-6xl";
+        ? "border-red-700 bg-gray-400"
+        : "border-gray-700 bg-gray-300";
     }
   },
   methods: {
