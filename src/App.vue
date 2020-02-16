@@ -17,16 +17,18 @@
 
     #playarea(class="m-5 flex-1 w-11/12 md:w-3/4 border border-gray-700")
       #playareastarted(v-if="started" class="h-full flex flex-wrap items-stretch")
-        #numberbuttons(v-for="num in nums" :key="num" :class="buttonSize")
-          button(
-            @click="increment(num)"
-            class="w-full h-full border-2 text-6xl"
-            :class="penaltyStyle"
-          ) {{ num }}
+        #buttons(v-for="num in nums" :key="num" :class="buttonSize")
+          NumberButton(:num="num" :colored="colored" :penalty="penalty" @increment="increment(num)")
       #playareanotstarted(v-else class="w-full h-full")
         #optionsbuttons(class="flex flex-col w-full h-full")
           button(
-            v-for="num in [3, 4, 5, 6]"
+            @click="startColor()"
+            class="w-full h-full border border-gray-700 bg-gray-400"
+          )
+            p(class="text-5xl font-bold") START COLOR
+            p(class="text-2xl text-gray-700") Click all the colors from red to purple!
+          button(
+            v-for="num in [3, 4, 5]"
             @click="start(num)"
             class="w-full h-full border border-gray-700 bg-gray-400"
           )
@@ -35,12 +37,18 @@
 </template>
 
 <script>
+import NumberButton from "./components/NumberButton.vue";
+
 export default {
   name: "Game",
+  components: {
+    NumberButton
+  },
   data: () => {
     return {
       nums: [],
       size: 0,
+      colored: false,
       started: false,
       cur: 1,
       time: 0,
@@ -53,11 +61,6 @@ export default {
   computed: {
     buttonSize: function() {
       return `w-1/${this.size} h-1/${this.size}`;
-    },
-    penaltyStyle: function() {
-      return this.penalty
-        ? "border-red-700 bg-gray-400"
-        : "border-gray-700 bg-gray-300";
     }
   },
   methods: {
@@ -70,6 +73,7 @@ export default {
       this.nums = nums;
 
       this.size = num;
+      this.colored = false;
 
       this.started = true;
 
@@ -84,6 +88,10 @@ export default {
           }
         }
       }, 10);
+    },
+    startColor() {
+      this.start(3);
+      this.colored = true;
     },
     increment(num) {
       if (num === this.cur) {
